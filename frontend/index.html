@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logowanie Administracji</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="login-container">
+  <h2>Panel Administracyjny Summer RP</h2>
+  <input type="text" id="username" placeholder="Login">
+  <input type="password" id="password" placeholder="Hasło">
+  <button id="loginBtn">Zaloguj</button>
+  <div id="loginError" class="error"></div>
+</div>
+<script src="script.js"></script>
+<script>
+document.getElementById('loginBtn').onclick = () => {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  fetch('../backend/admins.json')
+    .then(res => res.json())
+    .then(data => {
+      const admin = data.find(a => a.username === user && a.password === pass);
+      if (admin) {
+        localStorage.setItem('admin', JSON.stringify(admin));
+        window.location.href = 'panel.html';
+      } else {
+        document.getElementById('loginError').textContent = 'Niepoprawny login lub hasło';
+      }
+    });
+};
+</script>
+</body>
+</html>
